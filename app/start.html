@@ -1,0 +1,16 @@
+<div class="start">
+	<h1>Analysed Media</h1>
+
+    <div infinite-scroll='loadMore()' infinite-scroll-distance='0'>
+        <div class="row flow-grid">
+            <div class="movie-box" ng-repeat="movieid in showMovieId">
+                <div class="movie-box__wrap">
+                    <a href="#/media/{{ movieid }}">
+                        <div class="movie-poster" style="background-image: url(posters/{{ movieid }}.jpg)"></div>
+                        <img src="data/poster.png" >
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

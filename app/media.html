@@ -1,0 +1,125 @@
+<div class="media">
+
+    <div class="media-top">
+        <div class="media-top__blured blured" style="background-image: url(posters/{{mediaData.Imdbid}}.jpg)"></div>
+        <div class="media-top__poster poster">
+            <a href="http://vionel.com/movie/{{mediaData.VionelId}}" target="_blank">
+            <div class="poster__border"></div>
+                <img src="posters/{{mediaData.Imdbid}}.jpg">
+            </a>
+            
+        </div>
+        
+        <div class="media-top__info">
+            <h1 class="media-top__info__title">{{mediaData.BisicInfo.Title}}</h1>
+            <ul class="tags">
+                <li class="tags__genre" ng-repeat="tag in tags">{{tag}}</li><!--
+                --><li class="tags__tag" ng-repeat="(key, data) in mediaData.Environment" style="text-transform: capitalize;">{{key}}: {{data * 100 | number:0}}%</li><!--
+                --><li ng-if="mediaData.Speed" class="tags__tag">Speed: {{mediaData.Speed}}</li><!--
+                --><li ng-if="mediaData.Conversation" class="tags__tag">Conversation: {{mediaData.Conversation * 100 | number:0}}%</li>
+            </ul>
+            <div class="pies"></div>
+        </div>
+    </div>
+
+    <div class="media-body">
+
+        <div class="media-section">
+            <h2 class="media-section__title">Media information</h2>
+            <h4 class="media-section__info-title"><span>Released:</span> {{mediaData.BisicInfo.Released}}</h4>
+            <h4 class="media-section__info-title"><span>Language:</span> {{mediaData.BisicInfo.Language}}</h4>
+            <h4 class="media-section__info-title"><span>Director:</span> {{mediaData.BisicInfo.Director}}</h4>
+            <h4 class="media-section__info-title"><span>Writer:</span> {{mediaData.BisicInfo.Writer}}</h4>
+            <h4 class="media-section__info-title"><span>Country:</span> {{mediaData.BisicInfo.Country}}</h4>
+            <h4 class="media-section__info-title"><span>Awards:</span> {{mediaData.BisicInfo.Awards}}</h4>
+            <h4 class="media-section__info-title"><span>Rated:</span> {{mediaData.BisicInfo.Rated}}</h4>
+            <h4 class="media-section__info-title"><span>IMDB-Rating:</span> {{mediaData.BisicInfo.imdbRating}}</h4>
+            <h4 class="media-section__info-title"><span>Description:</span> {{mediaData.BisicInfo.Plot}}</h4>
+        </div>
+
+        <div ng-if="mediaData.Recommendation" class="media-section recommendation">
+
+            <h2 class="media-section__title">Recommendation</h2>
+            <div class="row flow-grid">
+                <div class="movie-box" ng-repeat="recommendItem in mediaData.Recommendation | limitTo: 8">
+                    <div class="movie-box__wrap">
+                        <a href="#/media/{{ recommendItem.imdbid }}">
+                            <div class="movie-poster" style="background-image: url(posters/{{ recommendItem.imdbid }}.jpg)"></div>
+                            <img src="data/poster.png" >
+                        </a>
+                        </div>
+                        <a href="http://vionel.com/movie/{{recommendItem.VionelId}}" target="_blank">{{recommendItem.VionelId}}</a>
+                        <br>
+                        <label>{{ recommendItem.score | number:10 }}</label>
+                        <br>
+                        <div class="feature" ng-repeat="reason in recommendItem.reason | limitTo:4">
+                            <label class="{{reason}}">{{ reason }}</label><br>
+                        </div>
+                    
+                </div>
+            </div>
+
+
+
+            <!-- <div class="startpage-box" ng-repeat="recommendItem in mediaData.Recommendation | limitTo: 10">
+                <div class="startpage-box__wrap">
+                    <a href="#/media/{{ recommendItem.imdbid }}">
+                        <div class="movie-poster" style="background-image: url(posters/{{ recommendItem.imdbid }}.jpg)"></div>
+                        <img src="data/poster.png" >
+                    </a>
+                    <a href="http://vionel.com/movie/{{recommendItem.VionelId}}" target="_blank">{{recommendItem.VionelId}}</a>
+                    <br>
+                    <label>{{ recommendItem.score | number:10 }}</label>
+                    <br>
+                    <div class="feature" ng-repeat="reason in recommendItem.reason">
+                        <label class="{{reason}}">{{ reason }}</label><br>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+
+        <div ng-if="mediaData.FrameInfo.length != 0" class="media-section">
+
+            <h2 class="media-section__title">Frames</h2>
+            <div ng-if="frameInfo" class="media-section__info">
+                <img src="data/frame_images/{{movieImdbid}}/{{frameImage}}" onerror="this.src=''">
+                <h4 id="speed_h" class="media-section__info__title"><span>Speed:</span> {{frameInfo.Speed}}</h4>
+                <h4 id="color_h" class="media-section__info__title"><span>Color:</span> {{frameInfo.Color}}</h4>
+                <h4 id="conversation_h" class="media-section__info__title"><span>Conversation:</span> {{frameInfo.conversation}}</h4>
+                <h4 id="brightness_h" class="media-section__info__title"><span>Brightness:</span> {{frameInfo.Brightness}}</h4>
+                <h4 id="dominatingcolor_h" class="media-section__info__title"><span>DominatingColor:</span> {{frameInfo.DominatingColor}}</h4>
+            </div>
+
+
+            <div ng-mouseout="leaveFrame()" class="frames">
+                <div class="frames__container" style="width: {{(mediaData.FrameInfo.length * 1) + 300}}px">
+                    
+                    <div class="frames__container__wrap">
+                        <div id="speed_div" class="frames__container__wrap__item" ng-repeat="item in mediaData.FrameInfo" ng-click="updateBox(item)" ng-mouseenter="updateBox(item, $event)" ng-mouseout="leaveBox($event)" style="background-color: rgb({{item.Color}}); height: {{mainHeight + item.Speed / 10}}px;"></div>
+                    </div>
+                    <div class="frames__container__wrap">
+                        <div id="conversation_div" class="frames__container__wrap__item frames__container__wrap__item_conversation" ng-repeat="item in mediaData.FrameInfo" ng-click="updateBox(item)" ng-mouseenter="updateBox(item, $event)" ng-mouseout="leaveBox($event)" ng-class="{'frames__container__wrap__item_conversation_true' : item.conversation == '1'}"></div>
+                    </div>
+                    <div class="frames__container__wrap">
+                        <div id="brightness_div" class="frames__container__wrap__item frames__container__wrap__item_brightness" ng-repeat="item in mediaData.FrameInfo" ng-click="updateBox(item)" ng-mouseenter="updateBox(item, $event)" ng-mouseout="leaveBox($event)" style="background-color: rgb({{item.Brightness}}, {{item.Brightness}}, {{item.Brightness}})"></div>
+                    </div>
+                    <div class="frames__container__wrap">
+                        <div id="dominatingcolor_div" class="frames__container__wrap__item frames__container__wrap__item_dominatingcolor" ng-repeat="item in mediaData.FrameInfo" ng-click="updateBox(item)" ng-mouseenter="updateBox(item, $event)" ng-mouseout="leaveBox($event)" ng-class="{'frames__container__wrap__item_dominatingcolor_red' : item.DominatingColor == 'R', 'frames__container__wrap__item_dominatingcolor_green' : item.DominatingColor == 'G', 'frames__container__wrap__item_dominatingcolor_blue' : item.DominatingColor == 'B'}"></div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div ng-if="mediaData.KeywordsBubble.nodes.length != 0" class="media-section media-section_nodes">
+            <h2 class="media-section__title">Nodes (Bawls)</h2>
+            <div id="nodeInfo" class="media-section__info media-section__info_nodes">
+                <h4 id="index" class="media-section__info__title"></h4>
+                <h4 id="wiki" class="media-section__info__title"></h4>
+                <h4 id="title" class="media-section__info__title"></h4>
+            </div>
+        </div>
+
+    </div>
+</div>
